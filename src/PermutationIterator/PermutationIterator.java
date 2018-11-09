@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PermutationIterator;
 
 import java.lang.reflect.Array;
@@ -10,11 +5,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- *
- * @author ALberto del Rosario Déniz
- * @param <E> Type of element
- */
 public class PermutationIterator<E> implements  Iterator<E[]>{
     
     private E[] arr;
@@ -31,7 +21,6 @@ public class PermutationIterator<E> implements  Iterator<E[]>{
             int aux = i;
             for (int j = 0; j < arr.length; j++) {
                 E n = arr[i];
-                //int aux = i;
                 if (n == arr[j]){
                     aux=j;
                     break;
@@ -40,9 +29,7 @@ public class PermutationIterator<E> implements  Iterator<E[]>{
             ind[i]=aux;
         }
         
-        //sort necesario
         Arrays.sort(ind);//start with ascending sequence of integers
-
 
         //output = new E[arr.length]; <-- cannot do in Java with generics, so use reflection
         output = (E[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);

@@ -1,30 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PermutationIterator;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-/**
- *
- * @author ALberto del Rosario Déniz
- */
 public class FileIO {
     private static int maxWeight;
     
-    public static Integer[] initializeArray(String filename) throws IOException {
+    public static Integer[] initializeArray(String fileName) throws IOException {
         
-        try(Scanner scanner = new Scanner(new File(filename))){
+        try(Scanner scanner = new Scanner(new File(fileName))){
             Integer[] arr = new Integer[scanner.nextInt()];
             maxWeight = scanner.nextInt();
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = scanner.nextInt();
             }
             return arr;
+        }
+        catch(IOException e){
+            System.out.println("Error: No se ha encontrado el fichero " + fileName);
+            System.exit(0);
+            return null;
         }
     }
 

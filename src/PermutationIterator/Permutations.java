@@ -7,48 +7,98 @@ public class Permutations{
     private static Integer[] bestOrder;
     private static int bestTravels;
     private static int maxWeight;
+    private static boolean debugIn = false;
+    private static boolean debugOut = false;
+    private static boolean debugComp = false;
+    private static boolean debugTime = false;
     
     public static void main(String[] args) throws IOException{
-        
-        
-        Integer[]list = FileIO.initializeArray(args[0]);
-        maxWeight = FileIO.getMaxWeight();
-        
-        PermutationIterator<Integer> perm;
-        perm = new PermutationIterator<>(list);
-        
-        int t;
-        Integer[] arr;
-        bestOrder = perm.next();
-        bestTravels = countTravels(bestOrder);
-        //System.out.println("first: " + bestTravels);
-         while(perm.hasNext()){
-            arr = perm.next();
-            //System.out.println(Arrays.toString(arr));
-            t = countTravels(arr);
-            //System.out.println("travels: " + t);
-            if (t < bestTravels){
-                bestTravels = t;
-                bestOrder = arr.clone();
+        double startTime = System.nanoTime();
+        Integer[]list = null;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-di")){
+                debugIn = true;
             }
-             
-        }
-        System.out.println("Best Order: " + Arrays.toString(bestOrder));
-        //System.out.println("Travels: " + bestTravels);
-        System.out.println("Travels: " + bestTravels);
-        System.out.println("Max Weight: " + maxWeight);
-        /*int count = 0;
-        while(perm.hasNext()){
             
-            System.out.println(Arrays.toString(perm.next()));
-            count++;
+            if (args[i].equals("-do")){
+                debugOut = true;
+            }
+            
+            if (args[i].equals("-dc")){
+                debugComp = true;
+            }
+            
+            if (args[i].equals("-dt")){
+                debugTime = true;
+            }
+            
+            if (args[i].equals("-f") && i < args.length - 1){
+               list = FileIO.initializeArray(args[i+1]);
+               maxWeight = FileIO.getMaxWeight();
+               i++;
+            }
+            
+            if (args[i].equals("-n") && i < args.length - 1){
+               maxWeight = Integer.parseInt(args[i+1]);
+               i++;
+            }
         }
-        System.out.println("total: " + count);
-        for (String arg : args) {
-            System.out.println(arg);
-        }*/
-        //System.out.println(Arrays.toString(list));
-        //System.out.println("Max= " + max);
+        
+        if(list != null){
+            PermutationIterator<Integer> perm;
+            perm = new PermutationIterator<>(list);
+
+            //do in debug input----------------------------------------
+            if (debugIn == true){
+                System.out.println("*** Input");
+                for (int i = 0; i < list.length; i++) {
+                    System.out.println((i+1) + " => " + list[i]);
+                }
+                System.out.println("-------------- Max_Weight = " + maxWeight);
+            }
+            ///--------------------------------------------------------
+            
+            int count = 0;
+            int t;
+            Integer[] arr;
+            bestTravels = list.length;
+            
+            while(perm.hasNext()){
+                arr = perm.next();
+                t = countTravels(arr);
+                count++;
+                
+                if (t < bestTravels){
+                    bestOrder = arr.clone();
+                    bestTravels = t;
+
+                    //do in debug comp-----------------------------------------
+                    if (debugComp == true){
+                        System.out.print("Order: " + Arrays.toString(bestOrder));
+                        System.out.println(" => Travels: " + bestTravels);
+                    }
+                    //---------------------------------------------------------
+                }
+            }
+            double stopTime = System.nanoTime();
+            double elapsedTime = (stopTime - startTime)/1000000000;
+
+             //do in debug output-------------------------------------------
+             if (debugOut == true){
+                System.out.println("------------------------------");
+                System.out.println("Combinations tested: " + count);
+                System.out.println(" Best computed item selection: ");
+                System.out.println("  Best Order: " + Arrays.toString(bestOrder));
+                System.out.println("   Travels: " + bestTravels);
+             }
+            //-------------------------------------------------------------- 
+            
+            //do in debug time
+            if (debugTime == true){
+                System.out.println("    Time: " + elapsedTime + " seconds");
+            }
+            //-------------------------------------------------------------- 
+        }
         
     }
     
@@ -56,20 +106,20 @@ public class Permutations{
         int travels = 0;
         int weight = 0;
         for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > maxWeight){
+                System.out.println("Error: El peso " + arr[i] + " excede la carga máxima de " + maxWeight);
+                System.exit(0);
+                return -1;
+            }
             weight = weight + arr[i];
-            //System.out.println(weight);
-            if (weight >= maxWeight /*|| i == arr.length - 1*/){
+            if (weight >= maxWeight){
                 travels++;
-                //weight = weight - maxWeight;
                 if (weight > maxWeight){
                     weight = arr[i];
-                    //System.out.println("mayor");
                 }else if(weight == maxWeight){
                     weight = 0;
-                    //System.out.println("igual");
                 }
             }
-            
         }
         if (weight != 0) travels = travels + 1;
         return travels;
