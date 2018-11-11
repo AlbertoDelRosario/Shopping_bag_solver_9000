@@ -5,22 +5,22 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class PermutationIterator<E> implements  Iterator<E[]>{
+public class PermutationIterator<Integer> implements  Iterator<Integer[]>{
     
-    private E[] arr;
+    private Integer[] arr;
     private int[] ind;
     private boolean has_next;
 
-    public E[] output;//next() returns this array, make it public
+    public Integer[] output;//next() returns this array, make it public
 
-    PermutationIterator(E[] arr){
+    PermutationIterator(Integer[] arr){
         this.arr = arr.clone();
         ind = new int[arr.length];
         
         for (int i = 0; i < arr.length; i++) {
             int aux = i;
             for (int j = 0; j < arr.length; j++) {
-                E n = arr[i];
+                Integer n = arr[i];
                 if (n == arr[j]){
                     aux=j;
                     break;
@@ -32,7 +32,7 @@ public class PermutationIterator<E> implements  Iterator<E[]>{
         Arrays.sort(ind);//start with ascending sequence of integers
 
         //output = new E[arr.length]; <-- cannot do in Java with generics, so use reflection
-        output = (E[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);
+        output = (Integer[]) Array.newInstance(arr.getClass().getComponentType(), arr.length);
         has_next = true;
     }
 
@@ -46,7 +46,7 @@ public class PermutationIterator<E> implements  Iterator<E[]>{
      * @return
      */
     @Override
-    public E[] next() {
+    public Integer[] next() {
         if (!has_next)
             throw new NoSuchElementException();
 

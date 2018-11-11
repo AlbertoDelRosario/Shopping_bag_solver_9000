@@ -39,7 +39,12 @@ public class Permutations{
             }
             
             if (args[i].equals("-n") && i < args.length - 1){
-               maxWeight = Integer.parseInt(args[i+1]);
+                try{
+                    maxWeight = Integer.parseInt(args[i+1]);
+                }catch(NumberFormatException e){
+                    System.out.println("Error: Parametro -n incorrecto");
+                    System.exit(0);
+                }
                i++;
             }
         }
